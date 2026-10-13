@@ -4,7 +4,7 @@ INCLUDE = -I/include
 CFLAGS = -Werror -Wall -Wextra -Wconversion -pthread -ggdb
 
 VPATH = src utils
-SRCS =
+SRCS = 01_main.c \
 
 OBJS = $(SRCS:.c=.o)
 
