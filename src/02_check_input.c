@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 14:26:41 by username      #+#    #+#                 */
-/*   Updated: 2026/10/13 17:32:46 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/13 19:04:45 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_argv(char **input_list);
 int	check_digits(char **input_list);
 int	check_int(char **input_list);
 
-unsigned int	input_checks(int argc, char **argv)
+int	input_checks(int argc, char **argv)
 {
 	char	**input_list;
 
@@ -32,7 +32,8 @@ unsigned int	input_checks(int argc, char **argv)
 		return (PARSING_ERROR);
 	if (check_argv(input_list) == PARSING_ERROR)
 		return (PARSING_ERROR);
-	if (input_list[7] != "FIFO" && input_list[7] != "EDF")
+	if (strcmp(input_list[list_len(input_list) - 1], "FIFO") != 0
+		&& strcmp(input_list[list_len(input_list) - 1], "EDF") != 0)
 		return (write_error("Schedular needs to be FIFO or EDF", PARSING_ERROR),
 			PARSING_ERROR);
 	if (argc == 2)

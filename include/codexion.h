@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/13 17:25:30 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/13 18:43:09 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ typedef struct s_coder
 
 // Src Functions
 	// Check input
-unsigned int			input_checks(int argc, char **argv);
+int						check_argc(int argc);
+int						check_argv(char **input_list);
+int						check_digits(char **input_list);
+int						check_int(char **input_list);
+int						input_checks(int argc, char **argv);
 
 // Utility functions
 char					**ft_split(char const *str, char chr);
@@ -71,14 +75,21 @@ char					*ft_itoa(int nbr);
 void					write_error(char *message, int error_code);
 
 	// List utils
-unsigned int			list_len(void **list);
+int						list_len(void *list);
 
 	// Int utils
 long int				ft_atol(const char *str);
 int						ft_isdigit(int c);
 
+	// String utils
+size_t					ft_strlcpy(char *dst, const char *src, size_t size);
+char					*ft_strdup(const char *s);
+
 	// Cleanup utils
 void					cleanup_list(char **list);
 void					free_and_null(void *incoming_memory);
+
+	// Memory utils
+void					*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif

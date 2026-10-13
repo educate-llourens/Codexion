@@ -6,10 +6,12 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:08:23 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/13 17:29:27 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/13 18:35:19 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+int	ft_isdigit(int c);
 
 long int	ft_atol(const char *str)
 {
