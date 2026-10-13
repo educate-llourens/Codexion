@@ -6,14 +6,21 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 12:27:29 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/13 12:51:54 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/13 16:34:02 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main(int argc, char **argv)
+#include <codexion.h>
+
+int	main(int argc, char **argv)
 {
-	signed int	error_check;
+	t_whiteboard	*whiteboard;
+	signed int		error_check;
+	char			**input_list;
 
 	error_check = 0;
-	return (0);
+
+	if (input_checks(argc, argv) == ERROR)
+		return (PARSING_ERROR);
+	return (OK);
 }
