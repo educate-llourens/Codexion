@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 14:26:41 by username      #+#    #+#                 */
-/*   Updated: 2026/10/13 19:04:45 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/14 13:42:19 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	check_int(char **input_list);
 int	input_checks(int argc, char **argv)
 {
 	char	**input_list;
+	char	*schedular;
 
 	if (argc == 2)
 		input_list = ft_split(argv[1], ' ');
@@ -32,9 +33,10 @@ int	input_checks(int argc, char **argv)
 		return (PARSING_ERROR);
 	if (check_argv(input_list) == PARSING_ERROR)
 		return (PARSING_ERROR);
-	if (strcmp(input_list[list_len(input_list) - 1], "FIFO") != 0
-		&& strcmp(input_list[list_len(input_list) - 1], "EDF") != 0)
-		return (write_error("Schedular needs to be FIFO or EDF", PARSING_ERROR),
+	schedular = input_list[list_len(input_list) - 1];
+	if (strcmp(schedular, "fifo") != 0
+		&& strcmp(schedular, "edf") != 0)
+		return (write_error("Schedular needs to be fifo or edf", PARSING_ERROR),
 			PARSING_ERROR);
 	if (argc == 2)
 		cleanup_list(input_list);
@@ -43,9 +45,9 @@ int	input_checks(int argc, char **argv)
 
 int	check_argc(int argc)
 {
-	if (argc < 7)
+	if (argc < 8)
 		return (write_error("Too few arguments", PARSING_ERROR), PARSING_ERROR);
-	if (argc > 7)
+	if (argc > 8)
 		return (write_error("Too many arguments", PARSING_ERROR),
 			PARSING_ERROR);
 	return (OK);
@@ -60,6 +62,12 @@ int	check_argv(char **input_list)
 		return (PARSING_ERROR);
 	if (check_int(input_list) == PARSING_ERROR)
 		return (PARSING_ERROR);
+	if (atoi(input_list[0]) < 1)
+		return (write_error("Not enough coders", PARSING_ERROR),
+			PARSING_ERROR);
+	if (atoi(input_list[0]) > MAX_NBR_CODERS)
+		return (write_error("Exceeds max number of coders", PARSING_ERROR),
+			PARSING_ERROR);
 	return (OK);
 }
 
@@ -79,7 +87,7 @@ int	check_digits(char **input_list)
 		j = 0;
 		while (item[j])
 		{
-			if (ft_isdigit(item[j]) == ERROR)
+			if (ft_isdigit(item[j]) == FALSE)
 				return (write_error("Argument is not a number", PARSING_ERROR),
 					PARSING_ERROR);
 			j++;
@@ -104,7 +112,10 @@ int	check_int(char **input_list)
 			return (write_error("Too many coders", PARSING_ERROR),
 				PARSING_ERROR);
 		if (str_to_nbr > INT_MAX)
-			return (write_error("Invalid user input", PARSING_ERROR),
+			return (write_error("Number is too big to be an int",
+					PARSING_ERROR), PARSING_ERROR);
+		if (str_to_nbr < INT_MIN)
+			return (write_error("Number to small to be an int", PARSING_ERROR),
 				PARSING_ERROR);
 		i++;
 	}

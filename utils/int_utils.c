@@ -6,10 +6,11 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:08:23 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/13 18:35:19 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/14 12:48:02 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <codexion.h>
 
 int	ft_isdigit(int c);
 
@@ -41,7 +42,7 @@ int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 	{
-		return (1);
+		return (TRUE);
 	}
-	return (0);
+	return (FALSE);
 }
