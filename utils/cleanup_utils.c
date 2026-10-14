@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cleanup.c                                          :+:    :+:            */
+/*   cleanup_utils.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/13 17:24:21 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/14 16:43:40 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
+
+void					free_and_null(void *incoming_memory);
+void					clean_whiteboard(t_whiteboard **whiteboard);
+void					bonfire(t_whiteboard **whiteboard, char **input_list);
 
 void	cleanup_list(char **list)
 {
@@ -35,4 +39,34 @@ void	free_and_null(void *incoming_memory)
 		free(*memory);
 		*memory = NULL;
 	}
+}
+
+void	clean_whiteboard(t_whiteboard **whiteboard)
+{
+	int	i;
+
+	i = 0;
+	if (!whiteboard || !*whiteboard)
+		return ;
+	if ((*whiteboard)->dongle_mutex_ptr)
+	{
+		while (i < (*whiteboard)->nbr_coders)
+		{
+			pthread_mutex_destroy(&(*whiteboard)->dongle_mutex_ptr[i]);
+			i++;
+		}
+		free_and_null((void **)&(*whiteboard)->dongle_mutex_ptr);
+	}
+	pthread_mutex_destroy(&(*whiteboard)->print_mutex);
+	pthread_mutex_destroy(&(*whiteboard)->gate_mutex);
+	pthread_mutex_destroy(&(*whiteboard)->burnt_mutex);
+	if ((*whiteboard)->coders)
+		free((*whiteboard)->coders);
+	free_and_null((void *)&(*whiteboard));
+}
+
+void	bonfire(t_whiteboard **whiteboard, char **input_list)
+{
+	cleanup_list(input_list);
+	clean_whiteboard(&whiteboard);
 }

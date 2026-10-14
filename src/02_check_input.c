@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 14:26:41 by username      #+#    #+#                 */
-/*   Updated: 2026/10/14 13:42:19 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/14 14:36:58 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	check_argv(char **input_list);
 int	check_digits(char **input_list);
 int	check_int(char **input_list);
 
-int	input_checks(int argc, char **argv)
+int	input_checks(int argc,
+				char **argv)
 {
 	char	**input_list;
 	char	*schedular;
