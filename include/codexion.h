@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/14 16:11:56 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/14 16:58:45 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@
 # include <unistd.h>
 # include <string.h>
 
+# define ERROR -1
+# define MALLOC_FAIL -2
+# define PARSING_ERROR -3
+# define THREAD_ERROR -4
+# define MUTEX_ERROR -5
+# define OK 0
 # define TRUE 1
 # define FALSE 2
-# define PARSING_ERROR -41
-# define OK 0
-# define ERROR -1
-# define MALLOC_FAIL 5
 # define MAX_NBR_CODERS 200
 
 typedef struct s_coder	t_coder;
