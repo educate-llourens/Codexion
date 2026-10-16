@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   codexion.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/14 16:58:45 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
+/*   Updated: 2026/10/16 19:26:18 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_whiteboard
 	int					min_nbr_compiles;
 	int					dongle_cooldown;
 	char				*scheduler;
-	t_time				current_time;
 	int					is_burnt;
 	t_time				event_start_time;
 	pthread_mutex_t		*dongle_mutex_ptr;
@@ -58,7 +57,7 @@ typedef struct s_coder
 {
 	int					id;
 	int					nbr_times_dongle_taken;
-	t_time				time_last_compiled;
+	int					time_last_compiled;
 	pthread_t			thread;
 	pthread_mutex_t		*left_dongle_ptr;
 	pthread_mutex_t		*right_dongle_ptr;
@@ -76,6 +75,10 @@ int						input_checks(int argc, char **argv);
 	// Settings
 int						init_whiteboard(t_whiteboard **whiteboard,
 							char **input_list);
+	// Scheduler
+int						take_dongles(t_coder *coder);
+int						debugging(t_coder *coder);
+int						refactoring(t_coder *coder);
 
 // Utility functions
 char					**ft_split(char const *str, char chr);
@@ -83,6 +86,7 @@ char					*ft_itoa(int nbr);
 
 	// Print utils
 void					write_error(char *message, int error_code);
+int						log_activity(t_coder *coder, char *msg);
 
 	// List utils
 int						list_len(void *list);
@@ -103,5 +107,12 @@ void					bonfire(t_whiteboard **whiteboard, char **input_list);
 
 	// Memory utils
 void					*ft_memcpy(void *dest, const void *src, size_t n);
+
+	// Time utils
+int						get_timestamp(t_whiteboard *whiteboard);
+int						will_burnout(t_coder *coder, int deadline_ms);
+
+	// Monitoring
+int						handle_calculated_burnout(t_coder *coder);
 
 #endif
