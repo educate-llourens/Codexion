@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/14 16:43:40 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/19 16:07:12 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,20 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	i = 0;
 	if (!whiteboard || !*whiteboard)
 		return ;
-	if ((*whiteboard)->dongle_mutex_ptr)
+	if ((*whiteboard)->dongle_mutex_list)
 	{
 		while (i < (*whiteboard)->nbr_coders)
 		{
-			pthread_mutex_destroy(&(*whiteboard)->dongle_mutex_ptr[i]);
+			pthread_mutex_destroy(&(*whiteboard)->dongle_mutex_list[i]);
 			i++;
 		}
-		free_and_null((void **)&(*whiteboard)->dongle_mutex_ptr);
+		free_and_null((void **)&(*whiteboard)->dongle_mutex_list);
 	}
+	pthread_mutex_unlock(&(*whiteboard)->print_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->print_mutex);
+	pthread_mutex_unlock(&(*whiteboard)->gate_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->gate_mutex);
+	pthread_mutex_unlock(&(*whiteboard)->burnt_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->burnt_mutex);
 	if ((*whiteboard)->coders)
 		free((*whiteboard)->coders);
@@ -68,5 +71,5 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 void	bonfire(t_whiteboard **whiteboard, char **input_list)
 {
 	cleanup_list(input_list);
-	clean_whiteboard(&whiteboard);
+	clean_whiteboard(whiteboard);
 }

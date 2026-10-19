@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/14 16:41:12 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/19 18:10:16 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,18 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 	whiteboard->time_to_compile = atoi(input_list[2]);
 	whiteboard->time_to_debug = atoi(input_list[3]);
 	whiteboard->times_to_refactor = atoi(input_list[4]);
-	whiteboard->min_nbr_compiles = atoi(input_list[5]);
+	whiteboard->max_nbr_compiles = atoi(input_list[5]);
 	whiteboard->dongle_cooldown = atoi(input_list[6]);
-	whiteboard->scheduler = atoi(input_list[7]);
+	whiteboard->scheduler = input_list[7];
 	whiteboard->is_burnt = FALSE;
-	whiteboard->dongle_mutex_ptr = malloc(sizeof(pthread_mutex_t)
+	whiteboard->simulation_started = FALSE;
+	whiteboard->dongle_mutex_list = malloc(sizeof(pthread_mutex_t)
 			* whiteboard->nbr_coders);
-	if (!whiteboard->dongle_mutex_ptr)
+	if (!whiteboard->dongle_mutex_list)
 		return (write_error("Could not malloc dongle ptr", MALLOC_FAIL),
 			ERROR);
 	if (create_dongles(whiteboard) == ERROR)
-		return (cleanup_list(whiteboard->dongle_mutex_ptr), ERROR);
+		return (cleanup_list(whiteboard->dongle_mutex_list), ERROR);
 	if (pthread_mutex_init(&whiteboard->print_mutex, NULL) != OK)
 		return (write_error("Could not create print_mutex", ERROR), ERROR);
 	if (pthread_mutex_init(&whiteboard->burnt_mutex, NULL) != OK)
@@ -64,7 +65,7 @@ int	create_dongles(t_whiteboard *whiteboard)
 	i = 0;
 	while (i < whiteboard->nbr_coders)
 	{
-		if (pthread_mutex_init(&whiteboard->dongle_mutex_ptr[i], NULL) != OK)
+		if (pthread_mutex_init(&whiteboard->dongle_mutex_list[i], NULL) != OK)
 			return (write_error("Could not create a dongle",
 					PARSING_ERROR), ERROR);
 		i++;
@@ -85,13 +86,13 @@ int	create_coders(t_whiteboard *whiteboard)
 	while (i < whiteboard->nbr_coders)
 	{
 		whiteboard->coders[i].id = i + 1;
-		whiteboard->coders[i].nbr_times_dongle_taken = 0;
+		whiteboard->coders[i].nbr_times_compiled = 0;
 		whiteboard->coders[i].check_whiteboard_ptr = whiteboard;
 		whiteboard->coders[i].left_dongle_ptr
-			= &whiteboard->dongle_mutex_ptr[i];
+			= &whiteboard->dongle_mutex_list[i];
 		right_dongle_position = (i + 1) % whiteboard->nbr_coders;
 		whiteboard->coders[i].right_dongle_ptr
-			= &whiteboard->dongle_mutex_ptr[right_dongle_position];
+			= &whiteboard->dongle_mutex_list[right_dongle_position];
 		i++;
 	}
 	return (OK);

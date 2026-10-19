@@ -27,7 +27,8 @@ $(NAME): $(OBJS)
 
 TEST_NAME = tests/tests
 
-TEST_SRCS = tests/input_tests.c \
+TEST_SRCS = tests/tests_main.c \
+			tests/input_tests.c \
        		src/02_check_input.c \
        		utils/cleanup_utils.c\
 	   		utils/ft_itoa.c\
@@ -36,7 +37,8 @@ TEST_SRCS = tests/input_tests.c \
 			utils/list_utils.c\
 			utils/print_utils.c\
 			utils/string_utils.c\
-			utils/memory_utils.c
+			utils/memory_utils.c \
+			utils/time_utils.c
 
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 

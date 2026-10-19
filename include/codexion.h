@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   codexion.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
-/*   Updated: 2026/10/16 19:26:18 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   codexion.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
+/*   Updated: 2026/10/19 18:10:26 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define PARSING_ERROR -3
 # define THREAD_ERROR -4
 # define MUTEX_ERROR -5
+# define BURNOUT -9
 # define OK 0
 # define TRUE 1
 # define FALSE 2
@@ -41,12 +42,13 @@ typedef struct s_whiteboard
 	int					time_to_compile;
 	int					time_to_debug;
 	int					times_to_refactor;
-	int					min_nbr_compiles;
+	int					max_nbr_compiles;
 	int					dongle_cooldown;
 	char				*scheduler;
 	int					is_burnt;
+	int					simulation_started;
 	t_time				event_start_time;
-	pthread_mutex_t		*dongle_mutex_ptr;
+	pthread_mutex_t		*dongle_mutex_list;
 	pthread_mutex_t		print_mutex;
 	pthread_mutex_t		burnt_mutex;
 	pthread_mutex_t		gate_mutex;
@@ -56,7 +58,7 @@ typedef struct s_whiteboard
 typedef struct s_coder
 {
 	int					id;
-	int					nbr_times_dongle_taken;
+	int					nbr_times_compiled;
 	int					time_last_compiled;
 	pthread_t			thread;
 	pthread_mutex_t		*left_dongle_ptr;
@@ -75,10 +77,13 @@ int						input_checks(int argc, char **argv);
 	// Settings
 int						init_whiteboard(t_whiteboard **whiteboard,
 							char **input_list);
-	// Scheduler
-int						take_dongles(t_coder *coder);
+	// Routine
 int						debugging(t_coder *coder);
 int						refactoring(t_coder *coder);
+int						run_routine(t_coder *coder);
+
+	// Monitoring
+int						event_started(t_coder *coder);
 
 // Utility functions
 char					**ft_split(char const *str, char chr);
@@ -87,6 +92,9 @@ char					*ft_itoa(int nbr);
 	// Print utils
 void					write_error(char *message, int error_code);
 int						log_activity(t_coder *coder, char *msg);
+
+	// Routine utils
+int						take_dongles(t_coder *coder);
 
 	// List utils
 int						list_len(void *list);

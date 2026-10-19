@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:37:53 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/13 19:13:51 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/19 14:56:43 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ static void	test_single_string_mode(void)
 		PARSING_ERROR);
 }
 
-int	main(void)
+int	input_tests_main(void)
 {
 	test_argc();
 	test_argv_valid();
