@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 12:27:29 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/19 15:23:40 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/20 12:34:47 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 char	**create_argv(int argc, char **argv);
 
+/*
+	DISTRIBUTES PROGRAM ACROSS CATEGORISED FUNCTIONS:
+		+ Checks input
+		+ Initialises the structs with correct information
+		+ Runs the simulation
+		+ Cleans up on error and/or exit
+	
+	RETURNS: Error code or OK
+*/
 int	main(int argc, char **argv)
 {
 	t_whiteboard	*whiteboard;

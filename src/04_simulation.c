@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/19 18:15:18 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/20 12:29:06 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,22 @@
 
 int	simulation_setup(t_whiteboard *whiteboard)
 {
+	int		i;
+	void	*thread_return_data;
+
+	i = 0;
 	if (spawn_coders(whiteboard) != OK)
 		return (ERROR);
-	
+	whiteboard->simulation_started = TRUE;
+	gettimeofday(&whiteboard->event_start_time, NULL);
+	while (i < whiteboard->nbr_coders)
+	{
+		if (pthread_join(whiteboard->coders[i].thread, &thread_return_data)
+			!= OK || (thread_return_data != OK))
+			return ((int)thread_return_data);
+		i++;
+	}
+	return (OK);
 }
 
 int	spawn_coders(t_whiteboard *whiteboard)

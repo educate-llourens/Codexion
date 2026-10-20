@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/19 18:10:16 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/20 12:49:49 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 	if (create_dongles(whiteboard) == ERROR)
 		return (cleanup_list(whiteboard->dongle_mutex_list), ERROR);
 	if (pthread_mutex_init(&whiteboard->print_mutex, NULL) != OK)
-		return (write_error("Could not create print_mutex", ERROR), ERROR);
+		return (write_error("Could not create print_mutex", -5), ERROR);
 	if (pthread_mutex_init(&whiteboard->burnt_mutex, NULL) != OK)
-		return (write_error("Could not create burnt_mutex", ERROR), ERROR);
+		return (write_error("Could not create burnt_mutex", -5), ERROR);
 	if (pthread_mutex_init(&whiteboard->gate_mutex, NULL) != OK)
-		return (write_error("Could not create gate_mutex", ERROR), ERROR);
+		return (write_error("Could not create gate_mutex", -5), ERROR);
 	return (OK);
 }
 

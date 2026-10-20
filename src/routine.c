@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/15 15:01:35 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/19 18:12:20 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/20 12:06:58 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	run_routine(t_coder *coder)
 	{
 		// Scheduler
 		if (compiling(coder) != OK)
+			return (ERROR);
+		if (release_dongles(coder) != OK)
 			return (ERROR);
 		if (debugging(coder) != OK)
 			return (ERROR);

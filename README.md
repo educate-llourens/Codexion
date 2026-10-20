@@ -4,9 +4,20 @@
 
 
 # Instructions
-
+## Error codes
+| Error code    | Int | Descritption                                                 |
+|---------------|-----|--------------------------------------------------------------|
+| ERROR         | -1  | Catch all error code                                         |
+| MALLOC_FAIL   | -2  | Memory fails to malloc                                       |
+| PARSING_ERROR | -3  | Bad input or failure to process information                  |
+| THREAD_ERROR  | -4  | Failure to create or destroy threads and/or their conditions |
+| MUTEX_ERROR   | -5  | Failure to create, lock or unlock a mutex                    |
+| BURNOUT       | -9  | A coder burnt out                                            |
+| OK            |  0  | Successfully executed with no errors                         |
+<br>
 
 # Resources
+[Markdown tables generator](https://www.tablesgenerator.com/markdown_tables)
 
 
 # Blocking cases handled
