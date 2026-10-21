@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/16 13:30:46 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/19 17:44:58 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 12:20:35 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	event_started(t_coder *coder)
 		return (write_error("Failed to lock gate_mutex",
 				MUTEX_ERROR), ERROR);
 	result = whiteboard->simulation_started;
-	if (pthread_mutex_unlock(&whiteboard->burnt_mutex) != OK)
+	if (pthread_mutex_unlock(&whiteboard->gate_mutex) != OK)
 		return (write_error("Failed to unlock burnt_mutex",
 				MUTEX_ERROR), ERROR);
 	return (result);

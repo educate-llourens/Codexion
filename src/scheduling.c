@@ -6,23 +6,33 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/20 14:52:00 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/20 15:10:23 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 15:02:06 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
-// create bubble sort for time last compiled
-t_coder	*edf(t_coder *coder)
+/*
+	MAKE SURE TO LOCK COMPILE_QUE_MUTEX WHEN CALLING THIS FUNCTION
+*/
+int	goes_before(t_coder *coder_a, t_coder *coder_b)
 {
-	int				i;
-	int				lifespan;
-	t_whiteboard	*whiteboard;
-	int				sorted;
+	int	value_a;
+	int	value_b;
 
-	whiteboard = coder->check_whiteboard_ptr;
-	lifespan = coder->time_last_compiled + whiteboard->time_to_burnout;
-	i = 0;
-	while ()
-
+	if (coder_a->check_whiteboard_ptr->scheduler == FIFO)
+	{
+		value_a = coder_a->ticket;
+		value_b = coder_b->ticket;
+	}
+	else
+	{
+		value_a = deadline(coder_a);
+		value_b = deadline(coder_b);
+	}
+	if (value_a < value_b)
+		return (TRUE);
+	if (value_a == value_b && coder_a->id < coder_b->id)
+		return (TRUE);
+	return (FALSE);
 }

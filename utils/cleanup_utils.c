@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/19 16:07:12 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 11:37:03 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	pthread_mutex_destroy(&(*whiteboard)->gate_mutex);
 	pthread_mutex_unlock(&(*whiteboard)->burnt_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->burnt_mutex);
-	if ((*whiteboard)->coders)
-		free((*whiteboard)->coders);
+	pthread_mutex_unlock(&(*whiteboard)->compile_que_mutex);
+	pthread_mutex_destroy(&(*whiteboard)->compile_que_mutex);
+	free_and_null((*whiteboard)->coders);
+	free_and_null((*whiteboard)->compile_que);
 	free_and_null((void *)&(*whiteboard));
 }
 

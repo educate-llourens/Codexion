@@ -6,13 +6,13 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 12:27:29 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/20 12:34:47 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 14:37:59 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
-char	**create_argv(int argc, char **argv);
+static char	**create_argv(int argc, char **argv);
 
 /*
 	DISTRIBUTES PROGRAM ACROSS CATEGORISED FUNCTIONS:
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 	return (OK);
 }
 
-char	**create_argv(int argc, char **argv)
+static char	**create_argv(int argc, char **argv)
 {
 	if (!argv)
 		return (NULL);

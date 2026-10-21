@@ -6,14 +6,15 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/20 12:49:49 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 15:25:54 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
-int	create_dongles(t_whiteboard *whiteboard);
 int	set_whiteboard_info(t_whiteboard *whiteboard, char **input_list);
+int	set_mutexes(t_whiteboard *whiteboard);
+int	create_dongles(t_whiteboard *whiteboard);
 int	create_coders(t_whiteboard *whiteboard);
 
 int	init_whiteboard(t_whiteboard **whiteboard,
@@ -23,6 +24,8 @@ int	init_whiteboard(t_whiteboard **whiteboard,
 	if (!*whiteboard)
 		return (write_error("Whiteboard malloc fail", MALLOC_FAIL), ERROR);
 	if (set_whiteboard_info(*whiteboard, input_list) != OK)
+		return (ERROR);
+	if (set_mutexes(*whiteboard) != OK)
 		return (ERROR);
 	if (create_coders(*whiteboard) != OK)
 		return (ERROR);
@@ -39,16 +42,21 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 	whiteboard->times_to_refactor = atoi(input_list[4]);
 	whiteboard->max_nbr_compiles = atoi(input_list[5]);
 	whiteboard->dongle_cooldown = atoi(input_list[6]);
-	whiteboard->scheduler = input_list[7];
+	if (strcmp(input_list[7], "fifo") == 0)
+		whiteboard->scheduler = FIFO;
+	else
+		whiteboard->scheduler = EDF;
 	whiteboard->is_burnt = FALSE;
 	whiteboard->simulation_started = FALSE;
-	whiteboard->dongle_mutex_list = malloc(sizeof(pthread_mutex_t)
+	whiteboard->dongles = malloc(sizeof(t_dongle)
 			* whiteboard->nbr_coders);
-	if (!whiteboard->dongle_mutex_list)
-		return (write_error("Could not malloc dongle ptr", MALLOC_FAIL),
-			ERROR);
-	if (create_dongles(whiteboard) == ERROR)
-		return (cleanup_list(whiteboard->dongle_mutex_list), ERROR);
+	return (OK);
+}
+
+int	set_mutexes(t_whiteboard *whiteboard)
+{
+	if (create_dongles(whiteboard) != OK)
+		return (cleanup_list(whiteboard->dongles), ERROR);
 	if (pthread_mutex_init(&whiteboard->print_mutex, NULL) != OK)
 		return (write_error("Could not create print_mutex", -5), ERROR);
 	if (pthread_mutex_init(&whiteboard->burnt_mutex, NULL) != OK)
@@ -60,15 +68,20 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 
 int	create_dongles(t_whiteboard *whiteboard)
 {
-	int	i;
+	int			i;
+	t_dongle	*dongle;
 
 	i = 0;
+	whiteboard->dongles = malloc(sizeof(t_dongle) * whiteboard->nbr_coders);
+	if (!whiteboard->dongles)
+		return (write_error("Faied to maloc dongles", MALLOC_FAIL), ERROR);
 	while (i < whiteboard->nbr_coders)
 	{
-		if (pthread_mutex_init(&whiteboard->dongle_mutex_list[i], NULL) != OK)
-			return (write_error("Could not create a dongle",
-					PARSING_ERROR), ERROR);
-		i++;
+		whiteboard->dongles[i].being_used = FALSE;
+		if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
+			return (write_error("Failed to create dongle mutex", MUTEX_ERROR),
+				ERROR);
+		whiteboard->dongles[i].next_ticket = 0;
 	}
 	return (OK);
 }
@@ -89,10 +102,10 @@ int	create_coders(t_whiteboard *whiteboard)
 		whiteboard->coders[i].nbr_times_compiled = 0;
 		whiteboard->coders[i].check_whiteboard_ptr = whiteboard;
 		whiteboard->coders[i].left_dongle_ptr
-			= &whiteboard->dongle_mutex_list[i];
+			= &whiteboard->dongles[i];
 		right_dongle_position = (i + 1) % whiteboard->nbr_coders;
 		whiteboard->coders[i].right_dongle_ptr
-			= &whiteboard->dongle_mutex_list[right_dongle_position];
+			= &whiteboard->dongles[right_dongle_position];
 		i++;
 	}
 	return (OK);

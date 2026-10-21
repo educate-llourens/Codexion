@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/15 15:01:35 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/20 12:06:58 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 15:14:03 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ int	run_routine(t_coder *coder);
 int	compiling(t_coder *coder)
 {
 	t_whiteboard	*whiteboard;
+	t_coder			*first_coder;
+	t_coder			*second_coder;
 
 	whiteboard = coder->check_whiteboard_ptr;
+	if (goes_before(first_coder, second_coder) == TRUE)
+		
 	if (take_dongles(coder) != OK)
 		return (ERROR);
 	coder->nbr_times_compiled += 1;
@@ -61,11 +65,11 @@ int	refactoring(t_coder *coder)
 int	run_routine(t_coder *coder)
 {
 	t_whiteboard	*whiteboard;
+	t_coder			*compile_que;
 
 	whiteboard = coder->check_whiteboard_ptr;
 	while (coder->nbr_times_compiled < whiteboard->max_nbr_compiles)
-	{
-		// Scheduler
+	{	
 		if (compiling(coder) != OK)
 			return (ERROR);
 		if (release_dongles(coder) != OK)

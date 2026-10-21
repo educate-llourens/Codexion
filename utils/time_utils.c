@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/15 15:58:50 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/19 15:10:32 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/21 10:55:09 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,10 @@ int	will_burnout(t_coder *coder, int deadline_ms)
 	if ((coder->time_last_compiled + deadline_ms) > death_time)
 		return (TRUE);
 	return (FALSE);
+}
+
+int	deadline(t_coder *coder)
+{
+	return (coder->time_last_compiled
+		+ coder->check_whiteboard_ptr->time_to_burnout);
 }
