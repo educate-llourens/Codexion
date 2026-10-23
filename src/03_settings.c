@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/21 15:25:54 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/23 16:52:55 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	set_mutexes(t_whiteboard *whiteboard)
 int	create_dongles(t_whiteboard *whiteboard)
 {
 	int			i;
-	t_dongle	*dongle;
+	t_dongle	dongle[2];
 
 	i = 0;
 	whiteboard->dongles = malloc(sizeof(t_dongle) * whiteboard->nbr_coders);
@@ -77,11 +77,17 @@ int	create_dongles(t_whiteboard *whiteboard)
 		return (write_error("Faied to maloc dongles", MALLOC_FAIL), ERROR);
 	while (i < whiteboard->nbr_coders)
 	{
-		whiteboard->dongles[i].being_used = FALSE;
 		if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
 			return (write_error("Failed to create dongle mutex", MUTEX_ERROR),
 				ERROR);
-		whiteboard->dongles[i].next_ticket = 0;
+		if (pthread_cond_init(&dongle->condition, NULL) != 0)
+			return (write_error("Failed to init dongle condition", -4), ERROR);
+		dongle->being_used = FALSE;
+		dongle->time_available = 0;
+		dongle->next_ticket = 0;
+		dongle->heap_size = 0;
+		dongle->dongle_que[0] = NULL;
+		dongle->dongle_que[1] = NULL;
 	}
 	return (OK);
 }

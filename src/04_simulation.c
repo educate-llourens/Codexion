@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/21 15:20:15 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/23 15:44:51 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ void	*coder_process(void	*function_arg)
 	coder = (t_coder *)function_arg;
 	whiteboard = coder->check_whiteboard_ptr;
 	while (event_started(coder) != TRUE)
-		usleep(1 * 1000);
-	if (coder->id % 2 != 0)
 		usleep(1 * 1000);
 	if (run_routine(coder) != OK)
 		thread_exit(coder);

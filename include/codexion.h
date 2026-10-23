@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/21 15:26:59 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/23 16:16:41 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void					write_error(char *message, int error_code);
 int						log_activity(t_coder *coder, char *msg);
 
 	// Routine utils
-int						take_dongles(t_coder *coder, t_dongle *dongle);
+int						take_dongle(t_coder *coder, t_dongle *dongle);
 int						release_dongles(t_coder *coder);
 
 	// List utils
