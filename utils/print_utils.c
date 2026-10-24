@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 14:54:30 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/19 15:02:00 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 14:54:30 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/24 17:20:08 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,8 @@ int	log_activity(t_coder *coder, char *msg)
 	t_whiteboard	*whiteboard;
 
 	whiteboard = coder->check_whiteboard_ptr;
-	if (pthread_mutex_lock(&whiteboard->print_mutex) != 0)
-		return (write_error("Failed print_mutex", MUTEX_ERROR), ERROR);
+	pthread_mutex_lock(&whiteboard->print_mutex);
 	printf("%d %d %s\n", get_timestamp(whiteboard), coder->id, msg);
-	if (pthread_mutex_unlock(&whiteboard->print_mutex) != 0)
-		return (write_error("Failed to unlock print_mutex", MUTEX_ERROR),
-			ERROR);
+	pthread_mutex_unlock(&whiteboard->print_mutex);
 	return (OK);
 }

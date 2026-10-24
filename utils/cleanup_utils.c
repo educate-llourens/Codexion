@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cleanup_utils.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/21 11:37:03 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cleanup_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 17:22:27 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/24 17:18:33 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	i = 0;
 	if (!whiteboard || !*whiteboard)
 		return ;
-	if ((*whiteboard)->dongle_mutex_list)
+	if ((*whiteboard)->dongles)
 	{
 		while (i < (*whiteboard)->nbr_coders)
 		{
-			pthread_mutex_destroy(&(*whiteboard)->dongle_mutex_list[i]);
+			pthread_mutex_destroy(&(*whiteboard)->dongles[i].mutex);
 			i++;
 		}
-		free_and_null((void **)&(*whiteboard)->dongle_mutex_list);
+		free_and_null((void **)&(*whiteboard)->dongles);
 	}
 	pthread_mutex_unlock(&(*whiteboard)->print_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->print_mutex);
@@ -63,10 +63,8 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	pthread_mutex_destroy(&(*whiteboard)->gate_mutex);
 	pthread_mutex_unlock(&(*whiteboard)->burnt_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->burnt_mutex);
-	pthread_mutex_unlock(&(*whiteboard)->compile_que_mutex);
-	pthread_mutex_destroy(&(*whiteboard)->compile_que_mutex);
 	free_and_null((*whiteboard)->coders);
-	free_and_null((*whiteboard)->compile_que);
+	free_and_null((*whiteboard)->dongles);
 	free_and_null((void *)&(*whiteboard));
 }
 

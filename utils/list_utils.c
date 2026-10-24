@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   list_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 15:57:12 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/23 16:58:51 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 15:57:12 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/24 17:39:03 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
+
+void	swap_coders(t_coder **queue, int i, int j);
+void	shift_down(t_dongle *dongle, int i);
+int		add_to_que(t_dongle *dongle, t_coder *coder);
 
 int	list_len(void *list)
 {
@@ -47,6 +51,23 @@ int	add_to_que(t_dongle *dongle, t_coder *coder)
 
 	if (dongle->heap_size > 1)
 		return (FALSE);
-	if ()
+	if (dongle->heap_size < 1)
+	{
+		dongle->dongle_que[0] = coder;
+		return (TRUE);
+	}
+	else
+		dongle->dongle_que[1] = coder;
+	dongle->heap_size += 1;
+	if (goes_before(dongle->dongle_que[1], dongle->dongle_que[0]) == TRUE)
+		swap_coders(dongle->dongle_que, 0, 1);
 	return (TRUE);
+}
+int	remove_from_que(t_dongle *dongle, t_coder *coder)
+{
+	if (dongle->heap_size > 1)
+		swap_coders(dongle->dongle_que, dongle->dongle_que[0],
+			dongle->dongle_que[1]);
+	dongle->dongle_que[dongle->heap_size - 1] = NULL;
+	dongle->heap_size -= 1;
 }

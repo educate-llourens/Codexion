@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   04_simulation.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/23 15:44:51 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   04_simulation.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/15 14:46:52 by lilo              #+#    #+#             */
+/*   Updated: 2026/10/24 17:10:54 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@ int	simulation_setup(t_whiteboard *whiteboard)
 	if (spawn_coders(whiteboard) != OK)
 		return (ERROR);
 	gettimeofday(&whiteboard->event_start_time, NULL);
-	if (pthread_mutex_lock(&whiteboard->gate_mutex) != 0)
-		return (write_error("Failed to lock gate_mutex", MUTEX_ERROR), ERROR);
+	pthread_mutex_lock(&whiteboard->gate_mutex);
 	whiteboard->simulation_started = TRUE;
-	if (pthread_mutex_unlock(&whiteboard->gate_mutex) != 0)
-		return (write_error("Failed to unlock gate_mutex", MUTEX_ERROR), ERROR);
+	pthread_mutex_unlock(&whiteboard->gate_mutex);
 	while (i < whiteboard->nbr_coders)
 	{
 		if (pthread_join(whiteboard->coders[i].thread, &thread_return_data)
@@ -56,9 +54,7 @@ int	spawn_coders(t_whiteboard *whiteboard)
 			= &coder->check_whiteboard_ptr->dongles[i];
 		coder->right_dongle_ptr
 			= &coder->check_whiteboard_ptr->dongles[right_position];
-		if (pthread_create(&coder->thread, NULL, coder_process, coder) != OK)
-			return (write_error("Failed to create thread", THREAD_ERROR),
-				ERROR);
+		pthread_create(&coder->thread, NULL, coder_process, coder);
 		i++;
 	}
 	return (OK);
