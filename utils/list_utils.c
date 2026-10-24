@@ -6,7 +6,7 @@
 /*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/13 15:57:12 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/24 17:39:03 by lilo             ###   ########.fr       */
+/*   Updated: 2026/10/24 17:46:23 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	swap_coders(t_coder **queue, int i, int j);
 void	shift_down(t_dongle *dongle, int i);
 int		add_to_que(t_dongle *dongle, t_coder *coder);
+int		remove_from_que(t_dongle *dongle, t_coder *coder);
 
 int	list_len(void *list)
 {

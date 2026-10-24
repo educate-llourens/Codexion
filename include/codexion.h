@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   codexion.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/23 16:16:41 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
+/*   Updated: 2026/10/24 18:45:30 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,14 @@ int						log_activity(t_coder *coder, char *msg);
 	// Routine utils
 int						take_dongle(t_coder *coder, t_dongle *dongle);
 int						release_dongles(t_coder *coder);
+int						wait_for_turn(t_coder *coder, t_dongle *dongle);
 
 	// List utils
+void					swap_coders(t_coder **queue, int i, int j);
+void					shift_down(t_dongle *dongle, int i);
+int						add_to_que(t_dongle *dongle, t_coder *coder);
+int						remove_from_que(t_dongle *dongle, t_coder *coder);
 int						list_len(void *list);
-void					swap_coders(t_coder **coders_list, int i, int j);
 
 	// Int utils
 long int				ft_atol(const char *str);
