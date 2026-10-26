@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 12:27:29 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/21 14:37:59 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/26 16:16:37 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ static char	**create_argv(int argc, char **argv);
 		+ Runs the simulation
 		+ Cleans up on error and/or exit
 	
-	RETURNS: Error code or OK
+	PARAMETERS: int argc, char **argv
+	
+	RETURNS: int	Error code or OK
 */
 int	main(int argc, char **argv)
 {
@@ -43,6 +45,16 @@ int	main(int argc, char **argv)
 	return (OK);
 }
 
+/*
+	CREATES A USABLE ARGUMENT LIST
+
+	PARAMETERS:
+		- int argc: Number of program arguments
+		- char ** argv: The list of arguments to manipulate
+
+	RETURN: 
+		- char **		Argument list
+*/
 static char	**create_argv(int argc, char **argv)
 {
 	if (!argv)

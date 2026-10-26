@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   codexion.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
-/*   Updated: 2026/10/24 18:45:30 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   codexion.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
+/*   Updated: 2026/10/26 19:17:31 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_whiteboard
 	pthread_mutex_t		burnt_mutex;
 	pthread_mutex_t		gate_mutex;
 	t_coder				*coders;
+	pthread_t			monitor_thread;
 }						t_whiteboard;
 
 typedef struct s_coder
@@ -111,6 +112,7 @@ int						run_routine(t_coder *coder);
 	// Monitoring
 int						handle_calculated_burnout(t_coder *coder);
 int						event_started(t_coder *coder);
+void					*monitor_burnout(void *function_arg);
 
 	// Scheduling
 int						goes_before(t_coder *coder_a, t_coder *coder_b);
@@ -124,15 +126,15 @@ void					write_error(char *message, int error_code);
 int						log_activity(t_coder *coder, char *msg);
 
 	// Routine utils
+int						wait_for_turn(t_coder *coder, t_dongle *dongle);
 int						take_dongle(t_coder *coder, t_dongle *dongle);
 int						release_dongles(t_coder *coder);
-int						wait_for_turn(t_coder *coder, t_dongle *dongle);
 
 	// List utils
 void					swap_coders(t_coder **queue, int i, int j);
-void					shift_down(t_dongle *dongle, int i);
+void					shift_down(t_dongle *dongle);
 int						add_to_que(t_dongle *dongle, t_coder *coder);
-int						remove_from_que(t_dongle *dongle, t_coder *coder);
+void					remove_from_que(t_dongle *dongle, t_coder *coder);
 int						list_len(void *list);
 
 	// Int utils
@@ -144,13 +146,17 @@ size_t					ft_strlcpy(char *dst, const char *src, size_t size);
 char					*ft_strdup(const char *s);
 
 	// Cleanup utils
-void					cleanup_list(char **list);
+void					cleanup_list(void *list);
 void					free_and_null(void *incoming_memory);
 void					clean_whiteboard(t_whiteboard **whiteboard);
 void					bonfire(t_whiteboard **whiteboard, char **input_list);
 
 	// Memory utils
 void					*ft_memcpy(void *dest, const void *src, size_t n);
+
+	// Mutex utils
+int						check_is_burnt(t_whiteboard *whiteboard);
+int						check_being_used(t_dongle *dongle);
 
 	// Time utils
 int						get_timestamp(t_whiteboard *whiteboard);

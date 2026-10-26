@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/23 16:52:55 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/26 18:40:57 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,20 @@ int	set_mutexes(t_whiteboard *whiteboard);
 int	create_dongles(t_whiteboard *whiteboard);
 int	create_coders(t_whiteboard *whiteboard);
 
+/*
+	MAIN FUNCTION FOR INITIATING THE WHITEBOARD
+		+ Set the basic whiteboard variables
+		+ Create the necessary mutexes
+		+ Create the coders and initialise basic coder information
+
+	PARAMETERS:
+		- t_whiteboard **whiteboard: The whiteboard we need to initiate
+		- char **input_list: The arguments to help initialise the whiteboard
+	
+	RETURN:
+		- int OK: Whiteboard successfully initiated
+		- int ERROR: If there was an issue initiating the whiteboard
+*/
 int	init_whiteboard(t_whiteboard **whiteboard,
 					char **input_list)
 {
@@ -32,6 +46,17 @@ int	init_whiteboard(t_whiteboard **whiteboard,
 	return (OK);
 }
 
+/*
+	INITIALISES THE WHITEBOARD VARIABLES FROM THE ARG LIST
+
+	PARAMETERS:
+		- t_whiteboard *whitebaord: The whiteboard pointer where we are
+		storing the shared information for our simulation
+		- char **input_list: The list with the information we need
+	
+	RETURN:
+		- int OK: Everything is fine and ready for use
+*/
 int	set_whiteboard_info(t_whiteboard *whiteboard,
 							char **input_list)
 {
@@ -49,10 +74,21 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 	whiteboard->is_burnt = FALSE;
 	whiteboard->simulation_started = FALSE;
 	whiteboard->dongles = malloc(sizeof(t_dongle)
-			* whiteboard->nbr_coders);
+			* (size_t)whiteboard->nbr_coders);
 	return (OK);
 }
 
+/*
+	SETS THE MUTEXES
+
+	PARAMETERS:
+		- t_whiteboard *whiteboard: The whiteboard pointer where we are going
+		to set the mutexes
+
+	RETURN:
+		- int OK: If everything is successfully set
+		- int ERROR: If there  was an issue
+*/
 int	set_mutexes(t_whiteboard *whiteboard)
 {
 	if (create_dongles(whiteboard) != OK)
@@ -66,13 +102,25 @@ int	set_mutexes(t_whiteboard *whiteboard)
 	return (OK);
 }
 
+/*
+	CREATES THE DONGLES AND INITIALISES THE BASIC VARIABLES
+
+	PARAMETERS:
+		- t_whiteboard *whiteboard: The whiteboard pointer where we set
+		the dongles
+
+	RETURN:
+		- int OK: If the dongles successfully created and variables set
+		- int ERROR: If there was an issue
+*/
 int	create_dongles(t_whiteboard *whiteboard)
 {
 	int			i;
 	t_dongle	dongle[2];
 
 	i = 0;
-	whiteboard->dongles = malloc(sizeof(t_dongle) * whiteboard->nbr_coders);
+	whiteboard->dongles = malloc(sizeof(t_dongle)
+			* (size_t)whiteboard->nbr_coders);
 	if (!whiteboard->dongles)
 		return (write_error("Faied to maloc dongles", MALLOC_FAIL), ERROR);
 	while (i < whiteboard->nbr_coders)
@@ -92,13 +140,25 @@ int	create_dongles(t_whiteboard *whiteboard)
 	return (OK);
 }
 
+/*
+	CREATES THE CODERS
+
+	PARAMETERS:
+		- t_whiteboard *whiteboard: The whiteboard where we are setting the
+		information
+	
+	RETURN:
+		- int OK: If there are no issues
+		- int ERROR: If there was a malloc fail
+*/
 int	create_coders(t_whiteboard *whiteboard)
 {
 	int	i;
 	int	right_dongle_position;
 
 	i = 0;
-	whiteboard->coders = malloc(sizeof(t_coder) * whiteboard->nbr_coders);
+	whiteboard->coders = malloc(sizeof(t_coder)
+			* (size_t)whiteboard->nbr_coders);
 	if (!whiteboard->coders)
 		return (write_error("Could not malloc coders list", MALLOC_FAIL),
 			ERROR);

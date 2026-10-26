@@ -6,14 +6,22 @@ CFLAGS = -Werror -Wall -Wextra -Wconversion -pthread -ggdb
 VPATH = src utils
 SRCS = src/01_main.c \
        src/02_check_input.c \
+	   src/03_settings.c \
+	   src/04_simulation.c \
+	   src/05_routine.c \
+	   src/monitoring.c \
+	   src/scheduling.c \
        utils/cleanup_utils.c\
 	   utils/ft_itoa.c\
 	   utils/ft_split.c\
 	   utils/int_utils.c\
 	   utils/list_utils.c\
+	   utils/memory_utils.c\
+	   utils/mutex_utils.c \
 	   utils/print_utils.c\
+	   utils/routine_utils.c \
 	   utils/string_utils.c\
-	   utils/memory_utils.c
+	   utils/time_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

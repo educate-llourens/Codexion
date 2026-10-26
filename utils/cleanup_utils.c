@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleanup_utils.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 17:22:27 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/24 17:18:33 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cleanup_utils.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
+/*   Updated: 2026/10/26 18:38:02 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,32 @@ void					free_and_null(void *incoming_memory);
 void					clean_whiteboard(t_whiteboard **whiteboard);
 void					bonfire(t_whiteboard **whiteboard, char **input_list);
 
-void	cleanup_list(char **list)
-{
-	char	**list_start;
+/*
+	CLEANS AND FREES A LIST
 
-	list_start = list;
-	while (*list)
+	PARAMETERS:
+		- void *list: The list to clean up and clean
+*/
+void	cleanup_list(void *list)
+{
+	void	**start;
+	void	**cursor;
+
+	if (!list)
+		return ;
+	start = list;
+	cursor = start;
+	while (*cursor)
 	{
-		free_and_null(&(*list));
-		list++;
+		free_and_null(cursor);
+		cursor++;
 	}
-	free_and_null(&(*list_start));
+	free(start);
 }
 
+/*
+	FREE AND NULL MEMORY
+*/
 void	free_and_null(void *incoming_memory)
 {
 	void	**memory;
@@ -41,6 +54,15 @@ void	free_and_null(void *incoming_memory)
 	}
 }
 
+/*
+	CLEANS AND FREES MEMORY IN THE WHITEBOARD
+		+ Unlock and destroy all the dongles mutexes
+		+ Unlocks and destroys all the whiteboard mutexes
+		+ Free and null the coders, dongles and whiteboard
+	
+	PARAMETERS:
+		- t_whiteboard **whiteboard: Whiteboard to clean and destroy
+*/
 void	clean_whiteboard(t_whiteboard **whiteboard)
 {
 	int	i;
@@ -52,8 +74,10 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	{
 		while (i < (*whiteboard)->nbr_coders)
 		{
+			pthread_mutex_unlock(&(*whiteboard)->dongles[i].mutex);
 			pthread_mutex_destroy(&(*whiteboard)->dongles[i].mutex);
 			i++;
+			free_and_null(&(*whiteboard)->dongles[i].dongle_que);
 		}
 		free_and_null((void **)&(*whiteboard)->dongles);
 	}
@@ -68,8 +92,16 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 	free_and_null((void *)&(*whiteboard));
 }
 
+/*
+	CLEANS AND DESTROYS THE ARG LIST AND WHITEBOARD
+
+	PARAMETERS:
+		- t_whiteboard **whiteboard: Shared info to clean and destroy
+		- char **input_list: The arg list to clean and destroy
+*/
 void	bonfire(t_whiteboard **whiteboard, char **input_list)
 {
 	cleanup_list(input_list);
 	clean_whiteboard(whiteboard);
 }
+

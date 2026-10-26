@@ -6,7 +6,7 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/13 14:26:41 by username      #+#    #+#                 */
-/*   Updated: 2026/10/21 14:38:17 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/26 16:29:15 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,21 @@ int	check_argv(char **input_list);
 int	check_digits(char **input_list);
 int	check_int(char **input_list);
 
+/*
+	CHECKS THE USER INPUT
+		+ Checks correct number of arguments
+		+ Checks number of coders within bounds
+		+ Checks arguments 1-6 are numeric
+		+ Checks the final argument is either "fifo" or "edf"
+
+	PARAMETERS:
+		- int argc: Number of arguments
+		- char ** argv: The list to break down and inspect
+
+	RETURN:
+		- OK if all checks came back fine
+		- ERROR or PARSING_ERROR if there was an issue
+*/
 int	input_checks(int argc,
 				char **argv)
 {
@@ -44,6 +59,16 @@ int	input_checks(int argc,
 	return (OK);
 }
 
+/*
+	CHECKS THE NUMBER OF ARGUMENTS IS CORRECT
+
+	PARAMETERS:
+		- int argc: The number of arguments
+
+	RETURN:
+		- int OK: If everything went fine
+		- int PARSING_ERROR if the number of args is incorrect
+*/
 int	check_argc(int argc)
 {
 	if (argc < 8)
@@ -54,6 +79,16 @@ int	check_argc(int argc)
 	return (OK);
 }
 
+/*
+	CHECKS IF THE INPUT VALUES ARE FEASIBLE
+
+	PARAMETERS:
+		- char **input_list: The list of arguments we need to check
+
+	RETURN:
+		- int OK: If everything is fine
+		- int PARSING_ERROR if there is an issue
+*/
 int	check_argv(char **input_list)
 {
 	if (!input_list)
@@ -72,6 +107,16 @@ int	check_argv(char **input_list)
 	return (OK);
 }
 
+/*
+	CHECKS IF ARGS 0-6 ARE NUMBERS
+
+	PARAMETERS:
+		- char **input_list: The arg list to check
+	
+	RETURN:
+		- int OK: If there were no issues
+		- int PARSING_ERROR: If anything is not a valid number
+*/
 int	check_digits(char **input_list)
 {
 	char	*item;
@@ -98,6 +143,16 @@ int	check_digits(char **input_list)
 	return (OK);
 }
 
+/*
+	CHECKS THE NUMBERS ARE VALID INT'S
+
+	PARAMETERS:
+		- char **input_list: The list of arguments to check
+	
+	RETURN:
+		- int OK: Numbers are valid
+		- int PARSING_ERROR: The numbers were not valid ints
+*/
 int	check_int(char **input_list)
 {
 	char		*item;

@@ -6,14 +6,23 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/20 14:52:00 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/21 15:02:06 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/26 17:32:28 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
 /*
-	MAKE SURE TO LOCK COMPILE_QUE_MUTEX WHEN CALLING THIS FUNCTION
+	CHECKS WHO SHOULD BE AT THE FRONT OF THE QUE
+		+ FIFO = ticket number
+		+ EDF = deadline based
+	
+	PARAMETERS:
+		- t_coder *coder_a, t_coder *coder_b: Coders to be compared
+
+	RETURN:
+		- int TRUE: If coder_a needs to go before coder_b
+		- int FALSE: If coder_b needs to go before coder_a
 */
 int	goes_before(t_coder *coder_a, t_coder *coder_b)
 {
