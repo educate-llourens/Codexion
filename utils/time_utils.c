@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   time_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/15 15:58:50 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/26 19:37:19 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   time_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/15 15:58:50 by lilo              #+#    #+#             */
+/*   Updated: 2026/10/27 11:09:31 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,6 @@ int	get_timestamp(t_whiteboard *whiteboard)
 	seconds = now.tv_sec - whiteboard->event_start_time.tv_sec;
 	ms = now.tv_usec - whiteboard->event_start_time.tv_usec;
 	return ((int)(seconds * 1000 + ms / 1000));
-}
-
-/*
-	CALCULATES IF THE CODER WILL BURN OUT IN THE MIDDLE OF THE ACTIVITY
-
-	PARAMETERS:
-		- t_coder *coder: The coder we need to calculate for
-		- int deadline_ms: The activity time in ms
-
-	RETURN:
-		- int TRUE: If the coder will burn out
-		- int FALSE: If the coder will not burn out
-*/
-int	will_burnout(t_coder *coder, int deadline_ms)
-{
-	int				death_time;
-	t_whiteboard	*whiteboard;
-
-	whiteboard = coder->check_whiteboard_ptr;
-
-	death_time = get_timestamp(whiteboard) + whiteboard->time_to_burnout;
-	if ((coder->time_last_compiled + deadline_ms) > death_time)
-		return (TRUE);
-	return (FALSE);
 }
 
 /*

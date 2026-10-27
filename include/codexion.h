@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   codexion.h                                         :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
-/*   Updated: 2026/10/26 19:17:31 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
+/*   Updated: 2026/10/27 12:13:07 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ typedef struct s_whiteboard
 	int					scheduler;
 	int					is_burnt;
 	int					simulation_started;
+	int					next_ticket;
 	t_time				event_start_time;
 	t_dongle			*dongles;
 	pthread_mutex_t		print_mutex;
 	pthread_mutex_t		burnt_mutex;
 	pthread_mutex_t		gate_mutex;
+	pthread_mutex_t		ticket_mutex;
 	t_coder				*coders;
 	pthread_t			monitor_thread;
 }						t_whiteboard;
@@ -108,9 +110,9 @@ int						compiling(t_coder *coder);
 int						debugging(t_coder *coder);
 int						refactoring(t_coder *coder);
 int						run_routine(t_coder *coder);
+int						take_both(t_coder *coder);
 
 	// Monitoring
-int						handle_calculated_burnout(t_coder *coder);
 int						event_started(t_coder *coder);
 void					*monitor_burnout(void *function_arg);
 
@@ -149,7 +151,8 @@ char					*ft_strdup(const char *s);
 void					cleanup_list(void *list);
 void					free_and_null(void *incoming_memory);
 void					clean_whiteboard(t_whiteboard **whiteboard);
-void					bonfire(t_whiteboard **whiteboard, char **input_list);
+void					bonfire(t_whiteboard **whiteboard, char **input_list,
+							int argc);
 
 	// Memory utils
 void					*ft_memcpy(void *dest, const void *src, size_t n);
@@ -160,7 +163,13 @@ int						check_being_used(t_dongle *dongle);
 
 	// Time utils
 int						get_timestamp(t_whiteboard *whiteboard);
-int						will_burnout(t_coder *coder, int deadline_ms);
 int						deadline(t_coder *coder);
+
+	// Scedule_utils
+int	    				try_take(t_coder *coder, t_dongle *first,
+							t_dongle *second);
+int	    				is_ready(t_coder *coder, t_dongle *dongle);
+void					join_queues(t_coder *coder, t_dongle *first,
+							t_dongle *second);
 
 #endif

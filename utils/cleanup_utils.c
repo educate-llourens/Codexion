@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cleanup_utils.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/26 18:38:02 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cleanup_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 17:22:27 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/27 12:10:01 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void					free_and_null(void *incoming_memory);
 void					clean_whiteboard(t_whiteboard **whiteboard);
-void					bonfire(t_whiteboard **whiteboard, char **input_list);
+void					bonfire(t_whiteboard **whiteboard,
+							char **input_list, int argc);
 
 /*
 	CLEANS AND FREES A LIST
@@ -54,6 +55,22 @@ void	free_and_null(void *incoming_memory)
 	}
 }
 
+static void	destroy_dongles(t_whiteboard *whiteboard)
+{
+	int	i;
+
+	i = 0;
+	if (!whiteboard->dongles)
+		return ;
+	while (i < whiteboard->nbr_coders)
+	{
+		pthread_mutex_destroy(&whiteboard->dongles[i].mutex);
+		pthread_cond_destroy(&whiteboard->dongles[i].condition);
+		i++;
+	}
+	free(whiteboard->dongles);
+}
+
 /*
 	CLEANS AND FREES MEMORY IN THE WHITEBOARD
 		+ Unlock and destroy all the dongles mutexes
@@ -65,31 +82,16 @@ void	free_and_null(void *incoming_memory)
 */
 void	clean_whiteboard(t_whiteboard **whiteboard)
 {
-	int	i;
-
-	i = 0;
 	if (!whiteboard || !*whiteboard)
 		return ;
-	if ((*whiteboard)->dongles)
-	{
-		while (i < (*whiteboard)->nbr_coders)
-		{
-			pthread_mutex_unlock(&(*whiteboard)->dongles[i].mutex);
-			pthread_mutex_destroy(&(*whiteboard)->dongles[i].mutex);
-			i++;
-			free_and_null(&(*whiteboard)->dongles[i].dongle_que);
-		}
-		free_and_null((void **)&(*whiteboard)->dongles);
-	}
-	pthread_mutex_unlock(&(*whiteboard)->print_mutex);
+	destroy_dongles(*whiteboard);
 	pthread_mutex_destroy(&(*whiteboard)->print_mutex);
-	pthread_mutex_unlock(&(*whiteboard)->gate_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->gate_mutex);
-	pthread_mutex_unlock(&(*whiteboard)->burnt_mutex);
 	pthread_mutex_destroy(&(*whiteboard)->burnt_mutex);
-	free_and_null((*whiteboard)->coders);
-	free_and_null((*whiteboard)->dongles);
-	free_and_null((void *)&(*whiteboard));
+	pthread_mutex_destroy(&(*whiteboard)->ticket_mutex);
+	free((*whiteboard)->coders);
+	free(*whiteboard);
+	*whiteboard = NULL;
 }
 
 /*
@@ -99,9 +101,9 @@ void	clean_whiteboard(t_whiteboard **whiteboard)
 		- t_whiteboard **whiteboard: Shared info to clean and destroy
 		- char **input_list: The arg list to clean and destroy
 */
-void	bonfire(t_whiteboard **whiteboard, char **input_list)
+void	bonfire(t_whiteboard **whiteboard, char **input_list, int argc)
 {
-	cleanup_list(input_list);
+	if (argc == 2)
+		cleanup_list(input_list);
 	clean_whiteboard(whiteboard);
 }
-

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   list_utils.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 15:57:12 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/26 19:33:21 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 15:57:12 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/27 11:17:59 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	shift_down(t_dongle *dongle)
 
 /*
 	ADD A CODER TO THE DONGLE QUE IN THE CORRECT ORDER
-		+ If no coders in the que, just add in 0 position
 		+ If too many coders in the heap, return FALSE
 		+ Add to the back of the que
 		+ If not correct order, swap accordingly
@@ -79,15 +78,10 @@ int	add_to_que(t_dongle *dongle, t_coder *coder)
 {
 	if (dongle->heap_size > 1)
 		return (FALSE);
-	if (dongle->heap_size < 1)
-	{
-		dongle->dongle_que[0] = coder;
-		return (TRUE);
-	}
-	else
-		dongle->dongle_que[1] = coder;
+	dongle->dongle_que[dongle->heap_size] = coder;
 	dongle->heap_size += 1;
-	if (goes_before(dongle->dongle_que[1], dongle->dongle_que[0]) == TRUE)
+	if (dongle->heap_size == 2
+		&& goes_before(dongle->dongle_que[1], dongle->dongle_que[0]) == TRUE)
 		swap_coders(dongle->dongle_que, 0, 1);
 	return (TRUE);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/13 14:54:30 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/26 14:34:40 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/13 14:54:30 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/27 11:01:45 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	log_activity(t_coder *coder, char *msg)
 
 	whiteboard = coder->check_whiteboard_ptr;
 	pthread_mutex_lock(&whiteboard->print_mutex);
-	pthread_mutex_lock(&whiteboard->burnt_mutex);
-	if (whiteboard->is_burnt == FALSE)
+	if (check_is_burnt(whiteboard) == FALSE)
 		printf("%d %d %s\n", get_timestamp(whiteboard), coder->id, msg);
 	pthread_mutex_unlock(&whiteboard->print_mutex);
 	return (OK);
 }
+

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   04_simulation.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/26 19:09:52 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   04_simulation.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/15 14:46:52 by lilo              #+#    #+#             */
+/*   Updated: 2026/10/27 21:06:29 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int	simulation_setup(t_whiteboard *whiteboard)
 	int		i;
 
 	i = 0;
+	gettimeofday(&whiteboard->event_start_time, NULL);
 	if (spawn_coders(whiteboard) != OK)
 		return (ERROR);
 	pthread_create(&whiteboard->monitor_thread,
 		NULL, monitor_burnout, whiteboard);
-	gettimeofday(&whiteboard->event_start_time, NULL);
 	pthread_mutex_lock(&whiteboard->gate_mutex);
 	whiteboard->simulation_started = TRUE;
 	pthread_mutex_unlock(&whiteboard->gate_mutex);
@@ -100,10 +100,8 @@ int	spawn_coders(t_whiteboard *whiteboard)
 void	*coder_process(void	*function_arg)
 {
 	t_coder			*coder;
-	t_whiteboard	*whiteboard;
 
 	coder = (t_coder *)function_arg;
-	whiteboard = coder->check_whiteboard_ptr;
 	while (event_started(coder) != TRUE)
 		usleep(1 * 1000);
 	run_routine(coder);

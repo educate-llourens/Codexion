@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   05_routine.c                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/15 15:01:35 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/26 19:14:22 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   05_routine.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/15 15:01:35 by lilo              #+#    #+#             */
+/*   Updated: 2026/10/27 11:08:29 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,8 @@ int	compiling(t_coder *coder)
 	t_whiteboard	*whiteboard;
 
 	whiteboard = coder->check_whiteboard_ptr;
-	if (take_dongle(coder, coder->left_dongle_ptr) != 0)
-		return (ERROR);
-	if (take_dongle(coder, coder->right_dongle_ptr) != 0)
-		return (ERROR);
-	if (will_burnout(coder, whiteboard->time_to_compile) == TRUE)
-		return (handle_calculated_burnout(coder), BURNOUT);
+	if (take_both(coder) != OK)
+		return (BURNOUT);
 	if (log_activity(coder, "is compiling") != OK)
 		return (ERROR);
 	coder->time_last_compiled = get_timestamp(coder->check_whiteboard_ptr);
@@ -69,8 +65,6 @@ int	debugging(t_coder *coder)
 	t_whiteboard	*whiteboard;
 
 	whiteboard = coder->check_whiteboard_ptr;
-	if (will_burnout(coder, whiteboard->time_to_debug) == TRUE)
-		return (handle_calculated_burnout(coder), BURNOUT);
 	if (log_activity(coder, "is debugging") != OK)
 		return (ERROR);
 	usleep((unsigned int)(whiteboard->time_to_debug * 1000));
@@ -95,8 +89,6 @@ int	refactoring(t_coder *coder)
 	t_whiteboard	*whiteboard;
 
 	whiteboard = coder->check_whiteboard_ptr;
-	if (will_burnout(coder, whiteboard->time_to_debug) == TRUE)
-		handle_calculated_burnout(coder);
 	if (log_activity(coder, "is refactoring") != OK)
 		return (ERROR);
 	usleep((unsigned int)(whiteboard->times_to_refactor * 1000));

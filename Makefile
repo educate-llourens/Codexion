@@ -20,6 +20,7 @@ SRCS = src/01_main.c \
 	   utils/mutex_utils.c \
 	   utils/print_utils.c\
 	   utils/routine_utils.c \
+	   utils/schedule_utils.c \
 	   utils/string_utils.c\
 	   utils/time_utils.c
 

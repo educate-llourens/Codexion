@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   03_settings.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/26 18:40:57 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   03_settings.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/14 14:12:44 by lelouren          #+#    #+#             */
+/*   Updated: 2026/10/27 12:14:52 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ int	init_whiteboard(t_whiteboard **whiteboard,
 {
 	*whiteboard = malloc(sizeof(t_whiteboard));
 	if (!*whiteboard)
+	{
+		memset(*whiteboard, 0, sizeof(t_whiteboard));
 		return (write_error("Whiteboard malloc fail", MALLOC_FAIL), ERROR);
+	}
 	if (set_whiteboard_info(*whiteboard, input_list) != OK)
 		return (ERROR);
 	if (set_mutexes(*whiteboard) != OK)
@@ -75,6 +78,7 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 	whiteboard->simulation_started = FALSE;
 	whiteboard->dongles = malloc(sizeof(t_dongle)
 			* (size_t)whiteboard->nbr_coders);
+	whiteboard->next_ticket = 0;
 	return (OK);
 }
 
@@ -91,14 +95,22 @@ int	set_whiteboard_info(t_whiteboard *whiteboard,
 */
 int	set_mutexes(t_whiteboard *whiteboard)
 {
+	if (!whiteboard->dongles)
+		return (write_error("Could not malloc dongles", MALLOC_FAIL), ERROR);
 	if (create_dongles(whiteboard) != OK)
-		return (cleanup_list(whiteboard->dongles), ERROR);
+		return (free_and_null(&whiteboard->dongles), ERROR);
 	if (pthread_mutex_init(&whiteboard->print_mutex, NULL) != OK)
-		return (write_error("Could not create print_mutex", -5), ERROR);
+		return (write_error("Could not create print_mutex", MUTEX_ERROR),
+			ERROR);
 	if (pthread_mutex_init(&whiteboard->burnt_mutex, NULL) != OK)
-		return (write_error("Could not create burnt_mutex", -5), ERROR);
+		return (write_error("Could not create burnt_mutex", MUTEX_ERROR),
+			ERROR);
 	if (pthread_mutex_init(&whiteboard->gate_mutex, NULL) != OK)
-		return (write_error("Could not create gate_mutex", -5), ERROR);
+		return (write_error("Could not create gate_mutex", MUTEX_ERROR),
+			ERROR);
+	if (pthread_mutex_init(&whiteboard->ticket_mutex, NULL) != OK)
+		return (write_error("Failed to create ticket_mutex", MUTEX_ERROR),
+			ERROR);
 	return (OK);
 }
 
@@ -116,26 +128,25 @@ int	set_mutexes(t_whiteboard *whiteboard)
 int	create_dongles(t_whiteboard *whiteboard)
 {
 	int			i;
-	t_dongle	dongle[2];
+	t_dongle	*dongle;
 
 	i = 0;
-	whiteboard->dongles = malloc(sizeof(t_dongle)
-			* (size_t)whiteboard->nbr_coders);
-	if (!whiteboard->dongles)
-		return (write_error("Faied to maloc dongles", MALLOC_FAIL), ERROR);
 	while (i < whiteboard->nbr_coders)
 	{
+		dongle = &whiteboard->dongles[i];
 		if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
-			return (write_error("Failed to create dongle mutex", MUTEX_ERROR),
-				ERROR);
+			return (write_error("Failed to create dongle mutex",
+					MUTEX_ERROR), ERROR);
 		if (pthread_cond_init(&dongle->condition, NULL) != 0)
-			return (write_error("Failed to init dongle condition", -4), ERROR);
+			return (write_error("Failed to init dongle condition",
+					THREAD_ERROR), ERROR);
 		dongle->being_used = FALSE;
 		dongle->time_available = 0;
 		dongle->next_ticket = 0;
 		dongle->heap_size = 0;
 		dongle->dongle_que[0] = NULL;
 		dongle->dongle_que[1] = NULL;
+		i++;
 	}
 	return (OK);
 }
