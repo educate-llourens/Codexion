@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   05_routine.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/15 15:01:35 by lilo              #+#    #+#             */
-/*   Updated: 2026/10/27 11:08:29 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   05_routine.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/15 15:01:35 by lilo          #+#    #+#                 */
+/*   Updated: 2026/10/28 13:25:16 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	compiling(t_coder *coder)
 		return (BURNOUT);
 	if (log_activity(coder, "is compiling") != OK)
 		return (ERROR);
-	coder->time_last_compiled = get_timestamp(coder->check_whiteboard_ptr);
+	set_compile_start(coder);
 	usleep((unsigned int)(whiteboard->time_to_compile * 1000));
-	coder->nbr_times_compiled += 1;
+	increase_compiled(coder);
 	release_dongles(coder);
 	return (OK);
 }

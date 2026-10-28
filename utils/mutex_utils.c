@@ -6,13 +6,17 @@
 /*   By: lelouren <lelouren@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2026/10/26 12:46:10 by lelouren      #+#    #+#                 */
-/*   Updated: 2026/10/26 18:24:14 by lelouren      ########   odam.nl         */
+/*   Updated: 2026/10/28 13:22:55 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
-int	check_being_used(t_dongle *dongle);
+int		check_is_burnt(t_whiteboard *whiteboard);
+int		get_last_compiled(t_coder *coder);
+int		get_times_compiled(t_coder *coder);
+void	set_compile_start(t_coder *coder);
+void	increase_compiled(t_coder *coder);
 
 /*
 	CHECKS THE IS_BURNT FLAG
@@ -33,19 +37,68 @@ int	check_is_burnt(t_whiteboard *whiteboard)
 }
 
 /*
-	CHECKS THE DONGLE BEING_USED FLAG
-		+ Locks and unlocks the dongle's mutex
-		+ Checks variable
+	SAFE RETRIEVAL OF LAST TIME COMPILED
 
 	PARAMETERS:
-		- t_dongle *dongle: The dongle we need to check
-*/
-int	check_being_used(t_dongle *dongle)
-{
-	int	being_used;
+		- t_coder *coder: The coder we need to check
 
-	pthread_mutex_lock(&dongle->mutex);
-	being_used = dongle->being_used;
-	pthread_mutex_unlock(&dongle->mutex);
-	return (being_used);
+	RETURN:
+		- int	time_compiled: The value of the last time coder compiled
+*/
+int	get_last_compiled(t_coder *coder)
+{
+	int	time_compiled;
+
+	pthread_mutex_lock(&coder->coder_mutex);
+	time_compiled = coder->time_last_compiled;
+	pthread_mutex_unlock(&coder->coder_mutex);
+	return (time_compiled);
+}
+
+/*
+	SAFE RETRIEVAL OF NUMBER OF TIMES COMPILED
+
+	PARAMETERS:
+		- t_coder *coder: The coder we need to check
+
+	RETURN:
+		- int	compile_count: Number of times compiled
+*/
+int	get_times_compiled(t_coder *coder)
+{
+	int	compile_count;
+
+	pthread_mutex_lock(&coder->coder_mutex);
+	compile_count = coder->nbr_times_compiled;
+	pthread_mutex_unlock(&coder->coder_mutex);
+	return (compile_count);
+}
+
+/*
+	SAFELY SETS THE COMPILE START TIME
+
+	PARAMETERS:
+		- t_coder *coder: Coder we need to set the compile time for
+*/
+void	set_compile_start(t_coder *coder)
+{
+	int	now;
+
+	now = get_timestamp(coder->check_whiteboard_ptr);
+	pthread_mutex_lock(&coder->coder_mutex);
+	coder->time_last_compiled = now;
+	pthread_mutex_unlock(&coder->coder_mutex);
+}
+
+/*
+	SAFELY INCREASES THE NUMBER OF TIMES CODER COMPILED
+
+	PARAMETERS:
+		- t_coder *coder: Coder we need to set the information for
+*/
+void	increase_compiled(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->coder_mutex);
+	coder->nbr_times_compiled += 1;
+	pthread_mutex_unlock(&coder->coder_mutex);
 }

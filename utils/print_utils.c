@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   print_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 14:54:30 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/27 11:01:45 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   print_utils.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 14:54:30 by lelouren      #+#    #+#                 */
+/*   Updated: 2026/10/28 14:11:19 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,3 @@ int	log_activity(t_coder *coder, char *msg)
 	pthread_mutex_unlock(&whiteboard->print_mutex);
 	return (OK);
 }
-

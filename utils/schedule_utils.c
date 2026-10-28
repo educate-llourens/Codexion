@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   schedule_utils.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/27 11:47:49 by lilo              #+#    #+#             */
-/*   Updated: 2026/10/27 12:13:18 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   schedule_utils.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/27 11:47:49 by lilo          #+#    #+#                 */
+/*   Updated: 2026/10/28 14:11:43 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <codexion.h>
 
-int	    try_take(t_coder *coder, t_dongle *first, t_dongle *second);
-int	    is_ready(t_coder *coder, t_dongle *dongle);
+int		try_take(t_coder *coder, t_dongle *first, t_dongle *second);
+int		is_ready(t_coder *coder, t_dongle *dongle);
 void	join_queues(t_coder *coder, t_dongle *first, t_dongle *second);
 
 void	join_queues(t_coder *coder, t_dongle *first, t_dongle *second)

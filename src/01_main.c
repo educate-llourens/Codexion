@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   01_main.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 12:27:29 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/27 20:33:12 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   01_main.c                                          :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 12:27:29 by lelouren      #+#    #+#                 */
+/*   Updated: 2026/10/28 14:07:34 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ int	main(int argc, char **argv)
 	if (init_whiteboard(&whiteboard, input_list) != OK)
 		return (bonfire(&whiteboard, input_list, argc), PARSING_ERROR);
 	if (whiteboard->nbr_coders == 1)
-		return (handle_single_coder(whiteboard), OK);
+	{
+		handle_single_coder(whiteboard);
+		return (bonfire(&whiteboard, input_list, argc), OK);
+	}
 	status_code = simulation_setup(whiteboard);
 	if (status_code != OK)
 		return (bonfire(&whiteboard, input_list, argc), status_code);
@@ -70,6 +73,12 @@ static char	**create_argv(int argc, char **argv)
 	return (argv);
 }
 
+/*
+	SETS UP AND HANDLES SINGLE CODER
+
+	PARAMETERS:
+		- t_whiteboard *whiteboard: The whiteboard to get the information
+*/
 void	handle_single_coder(t_whiteboard *whiteboard)
 {
 	t_coder	*coder;
@@ -81,9 +90,15 @@ void	handle_single_coder(t_whiteboard *whiteboard)
 		NULL);
 }
 
+/*
+	SINGLE CODER SIMULATION PROCESS
+
+	PARAMETERS:
+		- void *thread_arg(coder): The coder we are running the simulation for
+*/
 void	*lone_coder_process(void *thread_arg)
 {
-	t_coder *coder;
+	t_coder	*coder;
 
 	coder = (t_coder *)thread_arg;
 	pthread_mutex_lock(&coder->left_dongle_ptr->mutex);

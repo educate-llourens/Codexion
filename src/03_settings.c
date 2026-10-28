@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   03_settings.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/14 14:12:44 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/27 12:14:52 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   03_settings.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/14 14:12:44 by lelouren      #+#    #+#                 */
+/*   Updated: 2026/10/28 14:03:20 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,9 @@ int	create_coders(t_whiteboard *whiteboard)
 		right_dongle_position = (i + 1) % whiteboard->nbr_coders;
 		whiteboard->coders[i].right_dongle_ptr
 			= &whiteboard->dongles[right_dongle_position];
+		if (pthread_mutex_init(&whiteboard->coders[i].coder_mutex, NULL) != OK)
+			return (write_error("Could not create coder_mutex", MUTEX_ERROR),
+				ERROR);
 		i++;
 	}
 	return (OK);

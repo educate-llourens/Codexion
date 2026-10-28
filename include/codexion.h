@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   codexion.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 11:31:50 by username          #+#    #+#             */
-/*   Updated: 2026/10/27 12:13:07 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   codexion.h                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 11:31:50 by username      #+#    #+#                 */
+/*   Updated: 2026/10/28 14:10:53 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_coder
 	t_dongle			*left_dongle_ptr;
 	t_dongle			*right_dongle_ptr;
 	t_whiteboard		*check_whiteboard_ptr;
+	pthread_mutex_t		coder_mutex;
 }						t_coder;
 
 typedef struct s_dongle
@@ -159,16 +160,19 @@ void					*ft_memcpy(void *dest, const void *src, size_t n);
 
 	// Mutex utils
 int						check_is_burnt(t_whiteboard *whiteboard);
-int						check_being_used(t_dongle *dongle);
+int						get_last_compiled(t_coder *coder);
+int						get_times_compiled(t_coder *coder);
+void					set_compile_start(t_coder *coder);
+void					increase_compiled(t_coder *coder);
 
 	// Time utils
 int						get_timestamp(t_whiteboard *whiteboard);
 int						deadline(t_coder *coder);
 
 	// Scedule_utils
-int	    				try_take(t_coder *coder, t_dongle *first,
+int						try_take(t_coder *coder, t_dongle *first,
 							t_dongle *second);
-int	    				is_ready(t_coder *coder, t_dongle *dongle);
+int						is_ready(t_coder *coder, t_dongle *dongle);
 void					join_queues(t_coder *coder, t_dongle *first,
 							t_dongle *second);
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/15 15:58:50 by lilo              #+#    #+#             */
-/*   Updated: 2026/10/27 11:09:31 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   time_utils.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/15 15:58:50 by lilo          #+#    #+#                 */
+/*   Updated: 2026/10/28 13:27:19 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ int	get_timestamp(t_whiteboard *whiteboard)
 */
 int	deadline(t_coder *coder)
 {
-	return (coder->time_last_compiled
+	int	last_compiled;
+
+	last_compiled = get_last_compiled(coder);
+	return (last_compiled
 		+ coder->check_whiteboard_ptr->time_to_burnout);
 }

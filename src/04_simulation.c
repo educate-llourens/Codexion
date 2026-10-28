@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   04_simulation.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/15 14:46:52 by lilo              #+#    #+#             */
-/*   Updated: 2026/10/27 21:06:29 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   04_simulation.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
+/*   Updated: 2026/10/28 13:06:02 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	spawn_coders(t_whiteboard *whiteboard)
 			= &coder->check_whiteboard_ptr->dongles[i];
 		coder->right_dongle_ptr
 			= &coder->check_whiteboard_ptr->dongles[right_position];
+		pthread_mutex_init(&coder->coder_mutex, NULL);
 		pthread_create(&coder->thread, NULL, coder_process, coder);
 		i++;
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   monitoring.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/16 13:30:46 by lilo              #+#    #+#             */
-/*   Updated: 2026/10/27 11:10:22 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   monitoring.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/16 13:30:46 by lilo          #+#    #+#                 */
+/*   Updated: 2026/10/28 13:37:07 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void	*monitor_burnout(void *function_arg)
 		finished = 0;
 		while (i < whiteboard->nbr_coders)
 		{
-			if (whiteboard->coders[i].nbr_times_compiled
-					>= whiteboard->max_nbr_compiles)
+			if (get_times_compiled(&whiteboard->coders[i])
+				>= whiteboard->max_nbr_compiles)
 				finished++;
 			else if (get_timestamp(whiteboard)
 				>= deadline(&whiteboard->coders[i]))

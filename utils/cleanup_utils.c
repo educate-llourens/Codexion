@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cleanup_utils.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/10/13 17:22:27 by lelouren          #+#    #+#             */
-/*   Updated: 2026/10/27 12:10:01 by lilo             ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cleanup_utils.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2026/10/13 17:22:27 by lelouren      #+#    #+#                 */
+/*   Updated: 2026/10/28 13:57:52 by lelouren      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	destroy_dongles(t_whiteboard *whiteboard)
 	{
 		pthread_mutex_destroy(&whiteboard->dongles[i].mutex);
 		pthread_cond_destroy(&whiteboard->dongles[i].condition);
+		pthread_mutex_destroy(&whiteboard->coders[i].coder_mutex);
 		i++;
 	}
 	free(whiteboard->dongles);
