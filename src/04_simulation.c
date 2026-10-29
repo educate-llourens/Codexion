@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   04_simulation.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: lelouren <lelouren@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2026/10/15 14:46:52 by lilo          #+#    #+#                 */
-/*   Updated: 2026/10/28 13:06:02 by lelouren      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   04_simulation.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilo <lilo@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/15 14:46:52 by lilo              #+#    #+#             */
+/*   Updated: 2026/10/29 09:13:49 by lilo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,51 +35,22 @@ int	simulation_setup(t_whiteboard *whiteboard)
 
 	i = 0;
 	gettimeofday(&whiteboard->event_start_time, NULL);
-	if (spawn_coders(whiteboard) != OK)
-		return (ERROR);
+	while (i < whiteboard->nbr_coders)
+	{
+		pthread_create(&whiteboard->coders[i].thread, NULL, coder_process,
+			&whiteboard->coders[i]);
+		i++;
+	}
 	pthread_create(&whiteboard->monitor_thread,
 		NULL, monitor_burnout, whiteboard);
 	pthread_mutex_lock(&whiteboard->gate_mutex);
 	whiteboard->simulation_started = TRUE;
 	pthread_mutex_unlock(&whiteboard->gate_mutex);
 	pthread_join(whiteboard->monitor_thread, NULL);
-	while (i < whiteboard->nbr_coders)
-	{
-		pthread_join(whiteboard->coders[i].thread, NULL);
-		i++;
-	}
-	return (OK);
-}
-
-/*
-	CREATES AND INITIALISES THE CODER
-	
-	PARAMETERS:
-		- t_whiteboard *whiteboard: The whiteboard with the simulation shared
-		information
-	
-	RETURN:
-		- int OK: Coders and their threads successfully created
-*/
-int	spawn_coders(t_whiteboard *whiteboard)
-{
-	int		i;
-	t_coder	*coder;
-	int		right_position;
-
 	i = 0;
 	while (i < whiteboard->nbr_coders)
 	{
-		coder = &whiteboard->coders[i];
-		coder->time_last_compiled = 0;
-		right_position = (i + 1) % whiteboard->nbr_coders;
-		coder->id = i + 1;
-		coder->left_dongle_ptr
-			= &coder->check_whiteboard_ptr->dongles[i];
-		coder->right_dongle_ptr
-			= &coder->check_whiteboard_ptr->dongles[right_position];
-		pthread_mutex_init(&coder->coder_mutex, NULL);
-		pthread_create(&coder->thread, NULL, coder_process, coder);
+		pthread_join(whiteboard->coders[i].thread, NULL);
 		i++;
 	}
 	return (OK);
